@@ -1,8 +1,9 @@
 package webserver
 
 import (
-  "github.com/gin-gonic/gin"
-  Interface "github.com/MaximillianoNico/user-management-dashboard/backend/app/interface"
+	repository "github.com/MaximillianoNico/user-management-dashboard/backend/app/infrastructure/repository"
+	Interface "github.com/MaximillianoNico/user-management-dashboard/backend/app/interface"
+	"github.com/gin-gonic/gin"
 )
 
 type App struct {
@@ -10,24 +11,26 @@ type App struct {
 }
 
 func NewApp(
-  version string,
+	version string,
 ) *App {
-  return &App{
-    version: version,
-  }
+	return &App{
+		version: version,
+	}
 }
 
 func (svc *App) RunApp() {
-  app := gin.Default()
-  app.Use(gin.Logger())
-  app.Use(gin.Recovery())
+	app := gin.Default()
+	app.Use(gin.Logger())
+	app.Use(gin.Recovery())
 
-  app.ForwardedByClientIP = true
-  app.SetTrustedProxies([]string{"127.0.0.1"})
+	app.ForwardedByClientIP = true
+	app.SetTrustedProxies([]string{"127.0.0.1"})
 
-  Router := Interface.NewInterface(app)
+	client := repository.NewDatabase()
 
-  newApp := Router.Init()
-  
-  newApp.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	Router := Interface.NewInterface(app, client)
+
+	newApp := Router.Init()
+
+	newApp.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
