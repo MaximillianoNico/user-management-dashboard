@@ -1,0 +1,12 @@
+# air.toml
+root = "." # your root directory
+
+[build]
+  cmd = "go build -o ./bin/backend"
+  binary = "./bin/backend"
+  go_mod_tidy = true
+
+[[watcher]]
+  paths = ["./"]
+  go_files = ["main.go"]
+  build_delay = "1000ms"
