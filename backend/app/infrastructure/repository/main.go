@@ -13,8 +13,8 @@ import (
 
 const (
 	host     = "localhost"
-	port     = 5455
-	user     = "root"
+	port     = 5432
+	user     = "postgres"
 	password = "password"
 	dbName   = "firstcallqa"
 )
