@@ -20,10 +20,12 @@ const (
 )
 
 func NewDatabase() *DBClient {
-	connectionString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbName)
+	connectionString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s", host, port, user, password, dbName)
 
 	// Establish a connection to the PostgreSQL database
+	fmt.Println(connectionString)
 	conn, err := pgx.Connect(context.Background(), connectionString)
+	// conn, err := pgx.Connect(context.Background(), "postgres://root:password@db-firstcallqa:5432/firstcallqa")
 	if err != nil {
 		log.Fatal("Unable to connect to the database:", err)
 	}
