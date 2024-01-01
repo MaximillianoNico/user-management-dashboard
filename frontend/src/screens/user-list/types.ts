@@ -7,5 +7,5 @@ export interface IUser {
 
 export interface IEditForm {
   open?: boolean
-  onClose?: () => void
+  onClose: (isRefetch?: boolean) => void
 }

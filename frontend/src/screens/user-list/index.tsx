@@ -8,7 +8,7 @@ import AddEditForm from '@/components/src/screens/user-list/partials/add-edit-fo
 import ConfirmDelete from '@/components/src/screens/user-list/partials/confirm-delete'
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { onActionUser, reset } from "../../redux/features/userSelect";
+import { reset } from "../../redux/features/userSelect";
 import Colors from '../../helpers/color';
 import useAction from "./actions";
 
@@ -16,25 +16,14 @@ const Component = () => {
   const { isOpenModal, actionMode } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch()
 
-  const { data } = useAction();
+  const { data, onAddNew, onEdit, onDelete, onReload } = useAction();
   
   return (
     <Layout>
       <Container>
         <Header>
           <h2>User List</h2>
-          <Button
-            onClick={
-              () => dispatch(
-                onActionUser({
-                  user: {
-                    username: "",
-                  },
-                  mode: 'add'
-                })
-              )
-            }
-          >Add New</Button>
+          <Button onClick={onAddNew}>Add New</Button>
         </Header>
         <div>
           {data?.map(
@@ -53,19 +42,20 @@ const Component = () => {
                   <Subtitle>{firstname} {lastname}</Subtitle>
                 </Body>
                 <Center $gap="10px">
-                  <EditOutlined onClick={() => {
-                    dispatch(
-                      onActionUser({
-                        user: {
-                          username,
-                          firstname,
-                          lastname
-                        },
-                        mode: 'edit'
-                      })
-                    )
-                  }} style={{ cursor: 'pointer' }} size={26} />
-                  <DeleteOutlined onClick={() => dispatch(onActionUser({ user: { username: "max" }, mode: "delete"}))} style={{ cursor: 'pointer' }} size={26} />
+                  <EditOutlined
+                    onClick={() => onEdit({
+                      username,
+                      firstname,
+                      lastname
+                    })}
+                    style={{ cursor: 'pointer' }}
+                    size={26}
+                  />
+                  <DeleteOutlined
+                    onClick={() => onDelete(username)}
+                    style={{ cursor: 'pointer' }}
+                    size={26}
+                  />
                 </Center>
               </Card>
             )
@@ -85,7 +75,11 @@ const Component = () => {
       {(isOpenModal  && actionMode !== 'delete') && (
         <AddEditForm
           open={isOpenModal}
-          onClose={() => dispatch(reset())}
+          onClose={(isRefetch) => {
+            dispatch(reset())
+
+            if (isRefetch) onReload()
+          }}
         />
       )}
     </Layout>

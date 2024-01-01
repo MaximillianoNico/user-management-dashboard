@@ -40,7 +40,6 @@ const COLORS = {
   violet: "#800080",
   red: "#ff0000",
   silver: "#c0c0c0",
-  white: "#ffffff",
   yellow: "#ffff00"
 }
 

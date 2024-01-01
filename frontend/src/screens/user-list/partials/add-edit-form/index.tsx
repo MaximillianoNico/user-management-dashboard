@@ -1,5 +1,5 @@
-import { Input, Modal } from "antd"
-import { FC, useMemo } from "react"
+import { Alert, Input, Modal } from "antd"
+import { FC, useMemo, useState } from "react"
 
 import { Container, AvatarWrapper, UsernameTruncate, Avatar } from "./styles"
 import { InputGroup, InputLabel } from "@/components/src/components/input-group"
@@ -9,12 +9,26 @@ import { IEditForm } from "../../types"
 import { useAppSelector } from "@/components/src/redux/hooks"
 
 const Component:FC<IEditForm> = (props) => {
-  const { actionMode } = useAppSelector((state) => state.userReducer);
-  const { onSubmit, register, errors, getValues, setValue } = useAction({
-    onFailed: () => props?.onClose,
-    onSuccess: () => props?.onClose,
+  const [isErrorCreate, setIsErrorCreate] = useState<any>();
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+  const actionMode = useAppSelector((state) => state.userReducer.actionMode);
+
+  const cbHooks = {
+    onFailed: (err: any) => {
+      setIsErrorCreate(err)
+    },
+    onSuccess: () => {
+      setIsSuccess(true);
+      setIsErrorCreate(null);
+
+      setTimeout(() => {
+        if (typeof props?.onClose === 'function') props?.onClose(true);
+      }, 1500)
+    },
     watch: props?.open
-  });
+  }
+  const { onSubmit, register, errors, getValues, setValue, isLoading } = useAction(cbHooks);
 
   const title = useMemo(
     () => {
@@ -29,11 +43,13 @@ const Component:FC<IEditForm> = (props) => {
     <Modal
       title={title}
       open={props?.open}
-      okText="Save"
+      okText={isLoading ? "Loading..." : "Save"}
       cancelText="Cancel"
       onOk={onSubmit}
-      onCancel={props?.onClose}
+      onCancel={() => props?.onClose()}
     >
+      {isSuccess && <Alert message={"Successfuly "+ title} type="success" />}
+      {isErrorCreate && <Alert message={isErrorCreate?.data?.error} type="error" />}
       <Container>
         <AvatarWrapper>
           <Avatar size="large">
@@ -58,7 +74,7 @@ const Component:FC<IEditForm> = (props) => {
                     }
                   )
                 }
-                value={getValues('username')}
+                defaultValue={getValues('username')}
                 onChange={(e) => setValue('username', e.target.value)}
                 placeholder="username" />
               </InputGroup>
@@ -85,7 +101,7 @@ const Component:FC<IEditForm> = (props) => {
                   }
                 )
               }
-              value={getValues('firstname')}
+              defaultValue={getValues('firstname')}
               onChange={(e) => setValue('firstname', e.target.value)}
               placeholder="first name"
             />
@@ -114,7 +130,7 @@ const Component:FC<IEditForm> = (props) => {
                   }
                 )
               }
-              value={getValues('lastname')}
+              defaultValue={getValues('lastname')}
               onChange={(e) => setValue('lastname', e.target.value)}
               placeholder="last name" />
           </InputGroup>
