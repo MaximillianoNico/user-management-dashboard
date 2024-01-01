@@ -3,6 +3,7 @@ package webserver
 import (
 	repository "github.com/MaximillianoNico/user-management-dashboard/backend/app/infrastructure/repository"
 	Interface "github.com/MaximillianoNico/user-management-dashboard/backend/app/interface"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +24,12 @@ func (svc *App) RunApp() {
 	app.Use(gin.Logger())
 	app.Use(gin.Recovery())
 
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}
+	app.Use(cors.New(config))
+
 	app.ForwardedByClientIP = true
-	app.SetTrustedProxies([]string{"127.0.0.1"})
+	app.SetTrustedProxies([]string{"127.0.0.1", "127.0.0.1:3000"})
 
 	client := repository.NewDatabase()
 

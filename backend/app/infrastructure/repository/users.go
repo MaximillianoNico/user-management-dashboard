@@ -13,11 +13,12 @@ func (d *DBClient) CreateUser(newUser User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
+	fmt.Println("New: ", newUser)
 	rows, err := d.db.Exec(ctx, `
-    INSERT INTO users (username, firstname, lastname)
-    VALUES($1, $2, $3)
-    ON CONFLICT (username) DO NOTHING
-  `, newUser.Username, newUser.FirstName, newUser.LastName)
+		INSERT INTO users (username, firstname, lastname)
+		VALUES($1, $2, $3)
+		ON CONFLICT (username) DO NOTHING
+	`, newUser.Username, newUser.FirstName, newUser.LastName)
 
 	if err != nil {
 		return fmt.Errorf("insert failed: %w", err)
@@ -46,7 +47,7 @@ func (d *DBClient) GetUsers() (error, []User) {
 
 	for rows.Next() {
 		var user User
-		if err := rows.Scan(&user.Username, &user.FirstName, &user.LastName, &user.UserID, &user.CreatedOn); err != nil {
+		if err := rows.Scan(&user.UserID, &user.Username, &user.FirstName, &user.LastName, &user.CreatedOn); err != nil {
 			return err, []User{}
 		}
 		users = append(users, user)
