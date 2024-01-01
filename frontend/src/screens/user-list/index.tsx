@@ -6,12 +6,17 @@ import { Layout, Container, Card, Center, InputChecked, Title, Body, Subtitle, H
 
 import AddEditForm from '@/components/src/screens/user-list/partials/add-edit-form'
 import ConfirmDelete from '@/components/src/screens/user-list/partials/confirm-delete'
+
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { onActionUser, reset } from "../../redux/features/userSelect";
+import Colors from '../../helpers/color';
+import useAction from "./actions";
 
 const Component = () => {
   const { isOpenModal, actionMode } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch()
+
+  const { data } = useAction();
   
   return (
     <Layout>
@@ -32,54 +37,39 @@ const Component = () => {
           >Add New</Button>
         </Header>
         <div>
-          <Card $active>
-            <Center>
-              <InputChecked type="checkbox" />
-            </Center>
-            <Center>
-              <Avatar style={{ backgroundColor: "blue", verticalAlign: 'middle' }} size="large">
-                M
-              </Avatar>
-            </Center>
-            <Body>
-              <Title>Max</Title>
-              <Subtitle>maximillianonico8@gmail.com</Subtitle>
-            </Body>
-            <Center $gap="10px">
-              <EditOutlined onClick={() => {
-                dispatch(
-                  onActionUser({
-                    user: {
-                      username: "Max",
-                      firstname: "MAX-1",
-                      lastname: "MAX-LAST"
-                    },
-                    mode: 'edit'
-                  })
-                )
-              }} style={{ cursor: 'pointer' }} size={26} />
-              <DeleteOutlined onClick={() => dispatch(onActionUser({ user: { username: "max" }, mode: "delete"}))} style={{ cursor: 'pointer' }} size={26} />
-            </Center>
-          </Card>
-
-          <Card>
-            <Center>
-              <InputChecked type="checkbox" />
-            </Center>
-            <Center>
-              <Avatar style={{ backgroundColor: "blue", verticalAlign: 'middle' }} size="large">
-                M
-              </Avatar>
-            </Center>
-            <Body>
-              <Title>Max</Title>
-              <Subtitle>maximillianonico8@gmail.com</Subtitle>
-            </Body>
-            <Center $gap="10px">
-              <EditOutlined style={{ cursor: 'pointer' }} size={26} />
-              <DeleteOutlined style={{ cursor: 'pointer' }} size={26} />
-            </Center>
-          </Card>
+          {data?.map(
+            ({ username, firstname, lastname, user_id }) => (
+              <Card key={user_id} $active>
+                <Center>
+                  <InputChecked type="checkbox" />
+                </Center>
+                <Center>
+                  <Avatar style={{ backgroundColor: Colors.Random() }} size="large">
+                    {firstname?.split('')[0]?.toUpperCase()}
+                  </Avatar>
+                </Center>
+                <Body>
+                  <Title>{username}</Title>
+                  <Subtitle>{firstname} {lastname}</Subtitle>
+                </Body>
+                <Center $gap="10px">
+                  <EditOutlined onClick={() => {
+                    dispatch(
+                      onActionUser({
+                        user: {
+                          username,
+                          firstname,
+                          lastname
+                        },
+                        mode: 'edit'
+                      })
+                    )
+                  }} style={{ cursor: 'pointer' }} size={26} />
+                  <DeleteOutlined onClick={() => dispatch(onActionUser({ user: { username: "max" }, mode: "delete"}))} style={{ cursor: 'pointer' }} size={26} />
+                </Center>
+              </Card>
+            )
+          )}
         </div>
       </Container>
 

@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react"
+import { useGetUserListQuery } from "../../redux/services/users";
 
 export const useDelete = () => {
   const [usernameSelect, setUsernameSelect] = useState<string>("");
@@ -66,3 +67,13 @@ export const useEdit = () => {
     user
   }
 }
+
+const useAction = () => {
+  const { data, isLoading } = useGetUserListQuery({});
+
+  return {
+    data, isLoading
+  }
+}
+
+export default useAction;

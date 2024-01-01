@@ -1,4 +1,5 @@
 export interface IUser {
+  user_id?: string
   lastname?: string
   firstname?: string
   username?: string

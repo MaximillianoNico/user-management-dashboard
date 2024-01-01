@@ -9,14 +9,20 @@ export const userAPI = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/users"}),
   endpoints: (builder) => ({
     getUserList: builder.query({
-      query: () => "/"
+      query: () => ({
+        url: "/",
+        method: "GET"
+      }),
+      transformResponse: (rawResult: { data: IUser[] }) => {
+        return rawResult.data
+      },
     }),
     addNewUser: builder.mutation<ICreateUserResponse, IUser>({
       query: (payload) => ({
         url: '/new',
         method: 'POST',
         body: payload
-      })
+      }),
     }),
     editUser: builder.mutation<IBasicResponse, IUser>({
       query: (payload) => ({
