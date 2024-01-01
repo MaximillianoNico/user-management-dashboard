@@ -85,6 +85,8 @@ func (d *DBClient) UpdateUserInfo(user User) error {
 	}
 
 	queries := querySelectTable + strings.Join(querySetValue, ",") + queryCondition
+	fmt.Println("queries: ", queries)
+	fmt.Println("interfaceSlice: ", interfaceSlice)
 	rows, err := d.db.Exec(ctx, queries, interfaceSlice...)
 
 	rowsAffected := rows.RowsAffected()

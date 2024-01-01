@@ -8,6 +8,9 @@ we using NextJS 13 as a React Framework on webapp and Use Redux for State Manage
 - Backend <br />
 we create user service api with PosgtgreSQL as a Database, Go Gin Framework and Dockerize Service
 
+- Tools <br />
+Chrome browser, Postman, Sqlectron
+
 
 ## How to run
 here is the steps for starting the webapp and service
@@ -46,8 +49,8 @@ CREATE DATABASE firstcallqa;
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   username VARCHAR(50) UNIQUE NOT NULL,
-  firstname VARCHAR(100) UNIQUE NOT NULL,
-  lastname VARCHAR(100) UNIQUE NOT NULL,
+  firstname VARCHAR(100) NOT NULL,
+  lastname VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
