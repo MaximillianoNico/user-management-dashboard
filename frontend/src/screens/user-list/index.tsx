@@ -17,7 +17,7 @@ const Component = () => {
   const { isOpenModal, actionMode } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch()
 
-  const { data, onAddNew, onEdit, onDelete, onReload } = useAction();
+  const { data, isLoading, onAddNew, onEdit, onDelete, onReload } = useAction();
   
   return (
     <Layout>
@@ -36,7 +36,7 @@ const Component = () => {
                 onDelete={onDelete}
               />
             )
-          ) : (<EmptyState>Users list is empty</EmptyState>)}
+          ) : !isLoading && (<EmptyState>Users list is empty</EmptyState>)}
         </div>
       </Container>
 
