@@ -17,6 +17,16 @@ services:
       timeout: 5s
       retries: 5
 
+  webapp:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: firstcallweb
+    depends_on:
+      - postgresdb
+    ports:
+      - "3000:3000"
+
   service:
     build:
       context: ./backend
@@ -26,5 +36,3 @@ services:
       - postgresdb
     ports:
       - "8080:8080"
-    # environment:
-    #   DATABASE_URL: postgres://your_user:your_password@postgres:5432/your_database
