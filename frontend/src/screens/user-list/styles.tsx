@@ -25,10 +25,14 @@ export const Card = styled.div<{$active?: boolean}>`
   margin: 12px 0px;
   padding: 12px 10px;
   display: grid;
-  grid-template-columns: 60px 60px auto 120px;
+  grid-template-columns: 40px 40px auto 60px;
   width: 100%;
   border: 1px solid ${({ $active }) => $active ? "#2f80ed" : "#d8d8d8"};
   border-radius: 10px;
+
+  @media (min-width: 701px) {
+    grid-template-columns: 60px 60px auto 120px;
+  }
 `
 
 export const Center = styled.div<{$gap?: string}>`

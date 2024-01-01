@@ -57,35 +57,32 @@ const Component:FC<IEditForm> = (props) => {
           </Avatar>
         </AvatarWrapper>
         <div>
-          {actionMode === 'add' && (
-            <>
-              <InputGroup>
-                <InputLabel>Username</InputLabel>
-                <Input {
-                  ...register(
-                    "username",
-                    {
-                      required: {
-                        value: true,
-                        message: "Username is required"
-                      },
-                      minLength: { value: 4, message: "Min 4 character"},
-                      maxLength: { value: 44, message: 'Max 44 character'}
-                    }
-                  )
+          <InputGroup>
+            <InputLabel>Username</InputLabel>
+            <Input {
+              ...register(
+                "username",
+                {
+                  required: {
+                    value: true,
+                    message: "Username is required"
+                  },
+                  minLength: { value: 4, message: "Min 4 character"},
+                  maxLength: { value: 44, message: 'Max 44 character'}
                 }
-                defaultValue={getValues('username')}
-                onChange={(e) => setValue('username', e.target.value)}
-                placeholder="username" />
-              </InputGroup>
-              <ErrorMessage
-                errors={errors}
-                name="username"
-                render={({ message }) => <p style={{ color: 'red'}}>{message}</p>}
-              />
-            </>
-          )}
-          <InputGroup $marginTop={actionMode === 'add' ? '10px' : ''}>
+              )
+            }
+            disabled={actionMode === 'edit'}
+            defaultValue={getValues('username')}
+            onChange={(e) => setValue('username', e.target.value)}
+            placeholder="username" />
+          </InputGroup>
+          <ErrorMessage
+            errors={errors}
+            name="username"
+            render={({ message }) => <p style={{ color: 'red'}}>{message}</p>}
+          />
+          <InputGroup $marginTop={'10px'}>
             <InputLabel>Firstname</InputLabel>
             <Input
               {
