@@ -2,7 +2,7 @@
 import { Avatar, Button } from "antd";
 
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Layout, Container, Card, Center, InputChecked, Title, Body, Subtitle, Header } from "./styles";
+import { Layout, Container, Card, Center, InputChecked, Title, Body, Subtitle, Header, EmptyState } from "./styles";
 
 import AddEditForm from '@/components/src/screens/user-list/partials/add-edit-form'
 import ConfirmDelete from '@/components/src/screens/user-list/partials/confirm-delete'
@@ -26,7 +26,7 @@ const Component = () => {
           <Button onClick={onAddNew}>Add New</Button>
         </Header>
         <div>
-          {data?.map(
+          {data?.length ? data?.map(
             ({ username, firstname, lastname, user_id }) => (
               <Card key={user_id} $active>
                 <Center>
@@ -59,7 +59,7 @@ const Component = () => {
                 </Center>
               </Card>
             )
-          )}
+          ) : (<EmptyState>Users list is empty</EmptyState>)}
         </div>
       </Container>
 
@@ -67,7 +67,10 @@ const Component = () => {
       {(isOpenModal && actionMode === 'delete') && (
         <ConfirmDelete
           open={isOpenModal && actionMode === 'delete'}
-          onSuccess={() => {}}
+          onSuccess={() => {
+            dispatch(reset())
+            onReload()
+          }}
         />
       )}
 

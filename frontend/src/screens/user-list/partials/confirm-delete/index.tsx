@@ -1,19 +1,28 @@
-import { Modal } from "antd"
-import { FC } from "react"
+import { Alert, Modal } from "antd"
+import { FC, useEffect } from "react"
 import { IConfirmDelete } from "./types";
-import { useAppDispatch, useAppSelector } from "@/components/src/redux/hooks";
-import { reset } from "@/components/src/redux/features/userSelect";
+import useAction from "./actions";
 
 const Component:FC<IConfirmDelete> = (props) => {
-  const { user: { username = "" } } = useAppSelector((state) => state.userReducer);
-  const dispatch = useAppDispatch()
+  const { onReset, onConfirm, username, isSuccess, error } = useAction();
 
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        if (typeof props?.onSuccess === 'function') props?.onSuccess();
+      }, 1500)
+    }
+  }, [isSuccess, props]);
+  
   return (
     <Modal
       title="Confirm Delete"
       open={props?.open}
-      onOk={() => dispatch(reset())}
-      onCancel={() => dispatch(reset())}>
+      onOk={onConfirm}
+      onCancel={onReset}>
+
+      {isSuccess && <Alert message={"Successfuly Delete"} type="success" />}
+      {error && <Alert message={error} type="error" />}
       <p>Do you want to delete username {username}</p>
     </Modal>
   )

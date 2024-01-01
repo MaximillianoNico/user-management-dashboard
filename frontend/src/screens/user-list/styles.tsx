@@ -55,3 +55,9 @@ export const Subtitle = styled.div`
   margin-top: 6px;
   font-size: 14px;
 `
+
+export const EmptyState = styled.div`
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+`
